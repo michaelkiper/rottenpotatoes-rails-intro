@@ -17,6 +17,9 @@ class MoviesController < ApplicationController
     @movies = Movie.with_ratings(session[:ratings])
     @all_ratings = Movie.all_ratings
     @ratings_to_show = Movie.ratings_to_show(session[:ratings])
+    # raise Exception.new @ratings_to_show
+    @color_date = ""
+    @color_title = ""
 
     if params.keys.include?("header")
       if "title" == params["header"]

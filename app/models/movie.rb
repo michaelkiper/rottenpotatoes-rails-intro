@@ -16,7 +16,9 @@ class Movie < ActiveRecord::Base
     def self.ratings_to_show(ratings)
         ratings_l = {}
         if ratings != nil
-            ratings.each { |r| ratings_l.merge!(r => "1") }
+            ratings.each { |r, v| ratings_l.merge!(r => "1") }
+        else
+            ratings_l = {'G'=>"1", 'PG'=>"1", 'PG-13'=>"1", 'R'=>"1"}
         end
 
         return ratings_l
