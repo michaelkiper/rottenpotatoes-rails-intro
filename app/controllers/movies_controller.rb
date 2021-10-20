@@ -7,6 +7,8 @@ class MoviesController < ApplicationController
   end
 
   def index
+
+    # raise Exception.new params
     
     if not params.keys.include?("header") and params.keys.include?("ratings")
       session[:ratings] = params[:ratings]
@@ -21,16 +23,28 @@ class MoviesController < ApplicationController
         # sort by title
         @movies = @movies.order(:title)
         @color_title = "bg-warning"
+        session[:order] = "title"
 
       elsif "release_date" == params["header"]
         # sort by release date
         @movies = @movies.order(:release_date)
         @color_date = "bg-warning"
-
-      else
-        @movies = Movie.with_ratings(session[:ratings])
+        session[:order] = "release_date"
       end
     end
+
+    # see if the command isn't a home command, if it isn't, then use the previous session filters/ording
+    if not params.keys.include?("home") and not params.keys.include?("commit") and session.keys.include?("order")
+      if "title" == session["order"]
+        @movies = @movies.order(:title)
+        @color_title = "bg-warning"
+
+      elsif "release_date" == session["order"]
+        @movies = @movies.order(:release_date)
+        @color_date = "bg-warning"
+      end
+    end
+
   end
 
   def new
