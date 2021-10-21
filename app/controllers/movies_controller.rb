@@ -8,7 +8,13 @@ class MoviesController < ApplicationController
 
   def index
 
+    if not params.keys.include?("commit") and not params.keys.include?("home")
+      # raise Exception.new session
+      redirect_to movies_path( {"controller"=>"movies", "action"=>"index", "header"=>session[:order], :ratings=>session[:ratings] , "home"=>"1"} )
+    end
+
     # raise Exception.new params
+    # {"controller"=>"movies", "action"=>"index"}
     
     if not params.keys.include?("header") and params.keys.include?("ratings")
       session[:ratings] = params[:ratings]
@@ -17,7 +23,6 @@ class MoviesController < ApplicationController
     @movies = Movie.with_ratings(session[:ratings])
     @all_ratings = Movie.all_ratings
     @ratings_to_show = Movie.ratings_to_show(session[:ratings])
-    # raise Exception.new @ratings_to_show
     @color_date = ""
     @color_title = ""
 
